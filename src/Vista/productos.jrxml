@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="productos" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="32c1397d-8fc6-4b22-a232-350c605b72c7">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="103" splitType="Stretch">
+			<image>
+				<reportElement x="374" y="60" width="27" height="18" uuid="95857ef6-00fd-4c76-ad7f-35460c8b7a66"/>
+				<imageExpression><![CDATA["C:\\Users\\maxid\\Desktop\\JAVA\\iconowasap.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="273" y="24" width="202" height="18" uuid="b6ce3dab-1004-4f5b-96cc-f1d1c3d3efd7"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DISTRIBUIDORA DON YEYO]]></text>
+			</staticText>
+			<image>
+				<reportElement x="254" y="60" width="19" height="19" uuid="4feeb415-2b6a-4c27-a51d-f15b7c8b24f6"/>
+				<imageExpression><![CDATA["C:\\Users\\maxid\\Desktop\\JAVA\\iconotelefono.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="10" y="0" width="228" height="99" uuid="89ca2fc3-5426-42ad-94ac-c367e1362a87"/>
+				<imageExpression><![CDATA["C:\\Users\\maxid\\Desktop\\logodonyeyo.png"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="401" y="62" width="74" height="16" uuid="4f852d8a-7ea2-428b-ae80-04d9c9ead164"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[2255-435004]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="291" y="79" width="150" height="20" uuid="96d9208e-30d9-4720-8c62-4cfb4d6274d9"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[donyeyo.dvg@gmail.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="273" y="60" width="85" height="18" uuid="983a1453-7c2d-48da-a02a-f269c53db7a4"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[02255-452033]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="321" y="42" width="91" height="18" uuid="559569e0-4484-4d1a-8e91-b019510ece34"/>
+				<textElement>
+					<font size="13" isBold="false"/>
+				</textElement>
+				<text><![CDATA[VILLA GESELL]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
