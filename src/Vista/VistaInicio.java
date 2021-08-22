@@ -6,6 +6,7 @@
 package Vista;
 
 import Modelo.BaseDatos;
+import java.util.Calendar;
 import javax.swing.JFrame;
 
 /**
@@ -19,6 +20,9 @@ public class VistaInicio extends javax.swing.JFrame {
      */
     public VistaInicio() {
         initComponents1();
+        setResizable(false);
+      
+       
     }
 
     /**
@@ -47,7 +51,7 @@ public class VistaInicio extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
      private void initComponents1() {
-
+ 
         GrupoBotones = new javax.swing.ButtonGroup();
         PanelInteriorAzul = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
@@ -61,7 +65,7 @@ public class VistaInicio extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(0, 0, 0));
-
+         setSize(1173, 650);
         PanelInteriorAzul.setBackground(new java.awt.Color(0, 51, 102));
         PanelInteriorAzul.setBorder(new javax.swing.border.MatteBorder(null));
         PanelInteriorAzul.setToolTipText("");
@@ -100,7 +104,7 @@ public class VistaInicio extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
-        menuTemas.setText("Cuenta corriente ");
+        menuTemas.setText("Cuenta corriente");
 
         temaDark.setText("Clientes");
         temaDark.addActionListener(new java.awt.event.ActionListener() {
@@ -120,8 +124,6 @@ public class VistaInicio extends javax.swing.JFrame {
 
         jMenuBar1.add(menuTemas);
 
-        jMenu2.setText("Salir");
-        jMenuBar1.add(jMenu2);
 
         setJMenuBar(jMenuBar1);
 
@@ -136,12 +138,14 @@ public class VistaInicio extends javax.swing.JFrame {
             .addComponent(PanelInteriorAzul)
         );
 
-        pack();
+     
     }// </editor-fold>                        
 
     VistaControlStock inventario;
     VistaCtaCorrienteCliente ctaCorrienteCliente;
+    VistaCtaCorrienteProveedor ctaCorrienteProveedor;
     vistaVentas ventas;
+    
     private void btnArticulosActionPerformed(java.awt.event.ActionEvent evt) {                                             
              if (inventario == null) {
             inventario = new VistaControlStock();
@@ -187,15 +191,20 @@ public class VistaInicio extends javax.swing.JFrame {
                                             
 
     private void temaLightActionPerformed(java.awt.event.ActionEvent evt) {                                          
-         
+               if (ctaCorrienteProveedor == null) {
+            ctaCorrienteProveedor = new VistaCtaCorrienteProveedor();
+            PanelInteriorAzul.add(ctaCorrienteProveedor);
+            PanelInteriorAzul.getDesktopManager().maximizeFrame(ctaCorrienteProveedor);
+
+            ctaCorrienteProveedor.setVisible(true);
+        } else {
+            PanelInteriorAzul.getDesktopManager().maximizeFrame(ctaCorrienteProveedor);
+        }
         
       
     }                                         
-
-    /**
-     * @param args the command line arguments
-     */
-   
+     
+    
 
     
         
@@ -248,6 +257,14 @@ public class VistaInicio extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new VistaInicio().setVisible(true);
+              /*  Calendar expireDate = Calendar.getInstance();
+
+                expireDate.set(2020, 10, 11);
+
+                if (Calendar.getInstance().after(expireDate)) {
+     
+                  System.exit(0);
+}*/
             }
         });
     }

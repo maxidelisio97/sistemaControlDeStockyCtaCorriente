@@ -8,10 +8,12 @@ package Vista;
 import Modelo.BaseDatos;
 import Modelo.Cliente;
 import Modelo.CtaCorrienteCliente;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -35,6 +37,7 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         initComponents();
         cargarClientesEnComboBox();
         cargarColumnasCtaCorrienteClientes();
+        lblSumatoriaCtaCorriente.setEditable(false);
         AutoCompleteDecorator.decorate(comboClientes);
         ((javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI()).setNorthPane(null);
     }
@@ -66,6 +69,7 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         txtDescripcion = new javax.swing.JTextField();
         txtPago = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(1378, 788));
 
@@ -100,8 +104,6 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel1.setText("Pagó");
 
-        txtDebe.setText("0");
-
         jLabel2.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel2.setText("Saldo");
 
@@ -132,12 +134,17 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         jLabel5.setFont(new java.awt.Font("Dialog", 1, 13)); // NOI18N
         jLabel5.setText("Descripción");
 
-        txtPago.setText("0");
-
         jButton1.setText("Eliminar registro");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Consultar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
             }
         });
 
@@ -146,8 +153,8 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addContainerGap(31, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -156,87 +163,85 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
                         .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 171, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(btnNuevoCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPane1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 814, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 192, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(lblSumatoriaCtaCorriente, javax.swing.GroupLayout.PREFERRED_SIZE, 345, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(lblSumatoriaCtaCorriente, javax.swing.GroupLayout.PREFERRED_SIZE, 348, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel4)
-                                            .addComponent(jLabel3))
-                                        .addGap(42, 42, 42))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                        .addComponent(jLabel1)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED))
-                                    .addGroup(layout.createSequentialGroup()
+                            .addComponent(btnIngresarMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addComponent(jLabel3)
+                                    .addGap(48, 48, 48)
+                                    .addComponent(txtDebe))
+                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(btnIngresarMovimiento, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(txtDebe)
-                                    .addComponent(txtPago)
-                                    .addComponent(txtDescripcion)
-                                    .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 270, Short.MAX_VALUE))))))
-                .addContainerGap(143, Short.MAX_VALUE))
+                                        .addComponent(jLabel4)
+                                        .addComponent(jLabel1))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtDescripcion)
+                                        .addComponent(txtPago)
+                                        .addComponent(txtFecha, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel11)
-                            .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNuevoCliente)
-                            .addComponent(jButton6))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(63, 63, 63)
-                                .addComponent(jLabel4))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(52, 52, 52)
-                                .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(38, 38, 38)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtPago, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(39, 39, 39)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDebe, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3))
-                        .addGap(55, 55, 55)
-                        .addComponent(btnIngresarMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblSumatoriaCtaCorriente, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jLabel2)
-                                .addGap(25, 25, 25)))))
-                .addGap(0, 256, Short.MAX_VALUE))
+                        .addGap(10, 10, 10)
+                        .addComponent(jLabel4))
+                    .addComponent(txtFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(37, 37, 37)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(txtDescripcion, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtPago, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(36, 36, 36)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtDebe, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3))
+                .addGap(45, 45, 45)
+                .addComponent(btnIngresarMovimiento, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblSumatoriaCtaCorriente, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(25, 25, 25)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11)
+                    .addComponent(comboClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnNuevoCliente)
+                    .addComponent(jButton6))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton1)
+                .addGap(0, 118, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoClienteActionPerformed
+try{
         String nombre = JOptionPane.showInputDialog("Ingrese el NOMBRE del nuevo cliente");
         String dir = JOptionPane.showInputDialog("Ingrese la DIRECCIÓN del nuevo cliente");
         String cuit = JOptionPane.showInputDialog("Ingrese el CUIT del nuevo cliente");
@@ -250,12 +255,14 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
             cargarClientesEnComboBox();
             JOptionPane.showMessageDialog(null, "Se ha registrado a un nuevo cliente", "Nuevo cliente", 1);
         }
+}catch(NullPointerException e){
+    JOptionPane.showMessageDialog(null, "No ha ingresado nada");
+}
     }//GEN-LAST:event_btnNuevoClienteActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         cargarCtaCorrienteCliente();
-        txtDebe.setText("0");
-        txtPago.setText("0");
+     
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void btnIngresarMovimientoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnIngresarMovimientoActionPerformed
@@ -266,15 +273,70 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
         } else {
             ActualizarCuentaCorriente();
         }
-
+        txtDebe.setText("");
+        txtPago.setText("");
     }//GEN-LAST:event_btnIngresarMovimientoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-     CtaCorrienteCliente cta =( CtaCorrienteCliente) modeloTablaCtaCorrienteClientes.getValueAt(tablaCtaCorrienteClientes.getSelectedRow(), 1);
-       base.eliminarFilaCtaCorrienteCliente(cta);
-      
-       cargarCtaCorrienteCliente();
+        int numFilas = tablaCtaCorrienteClientes.getSelectedRow();
+        int filaSelec = modeloTablaCtaCorrienteClientes.getRowCount();
+        if (filaSelec > 0) {
+            int quitar = JOptionPane.showConfirmDialog(this, "¿ Desea eliminar el registro seleccionado ?");
+            if (quitar == 0) {
+                if (numFilas == -1) {
+                    JOptionPane.showMessageDialog(this, "Debe seleccionar el registro que desea quitar", "Error", JOptionPane.ERROR_MESSAGE);
+                } else {
+                    CtaCorrienteCliente cta = (CtaCorrienteCliente) modeloTablaCtaCorrienteClientes.getValueAt(tablaCtaCorrienteClientes.getSelectedRow(), 1);
+                    base.eliminarFilaCtaCorrienteCliente(cta);
+
+                    cargarCtaCorrienteCliente();
+                }
+            }
+        }
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            String fechaEnString = sdf.format(txtFecha.getDate());
+            java.util.Date fechaEnDate = sdf.parse(fechaEnString);
+            java.sql.Date date1 = new java.sql.Date(fechaEnDate.getTime());           
+            String fechaDeHoy = sdf.format(new Date().getTime());
+            java.util.Date fechaEnDate2 = sdf.parse(fechaDeHoy);
+            java.sql.Date date2 = new java.sql.Date(fechaEnDate2.getTime());  
+            int idCliente = comboClientes.getSelectedIndex() +1;
+            ArrayList<CtaCorrienteCliente> lista = base.ctaCorrienteClientePorFechas(idCliente,date1, date2);
+            int numeroCta = lista.size();
+            modeloTablaCtaCorrienteClientes.setNumRows(numeroCta);
+            
+            for (int i = 0; i < numeroCta; i++) {
+                
+                CtaCorrienteCliente cta = lista.get(i);
+                int idCta = cta.getIdCtaCliente();
+                Date fecha = cta.getFecha();
+                String descripcion = cta.getDescripcion();
+                double debe = cta.getDebe();
+                double haber = cta.getHaber();
+                double saldo = cta.getSaldo();
+                int id_Cliente = cta.getIdCliente();
+                
+                modeloTablaCtaCorrienteClientes.setValueAt(fecha, i, 0);
+                modeloTablaCtaCorrienteClientes.setValueAt(cta, i, 1);
+                modeloTablaCtaCorrienteClientes.setValueAt(debe, i, 2);
+                modeloTablaCtaCorrienteClientes.setValueAt(haber, i, 3);
+                modeloTablaCtaCorrienteClientes.setValueAt(saldo, i, 4);
+                
+            }
+            /*   double sumatoria = getSaldoCtaCorriente();
+            lblSumatoriaCtaCorriente.setText(String.valueOf(sumatoria));*/
+        } catch (ParseException ex) {
+            Logger.getLogger(VistaCtaCorrienteCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_jButton2ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -282,6 +344,7 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
     public javax.swing.JButton btnNuevoCliente;
     public javax.swing.JComboBox<String> comboClientes;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
@@ -343,20 +406,20 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
     private void cargarCtaCorrienteCliente() {
         int idCliente = comboClientes.getSelectedIndex() + 1;
 
-        ArrayList<CtaCorrienteCliente> ctaCliente = base.getCtaCorrientePorId(idCliente);
+        ArrayList<CtaCorrienteCliente> ctaCliente = base.getCtaCorrienteClientePorId(idCliente);
         int numeroCta = ctaCliente.size();
         modeloTablaCtaCorrienteClientes.setNumRows(numeroCta);
 
         if (numeroCta == 0) {
             JOptionPane.showMessageDialog(null, "El cliente no tiene iniciada una cuenta corriente ");
-         
+
         } else {
-           
+
             for (int i = 0; i < numeroCta; i++) {
 
                 CtaCorrienteCliente cta = ctaCliente.get(i);
                 int idCta = cta.getIdCtaCliente();
-                String fecha = cta.getFecha();
+                 java.util.Date fecha = cta.getFecha();
                 String descripcion = cta.getDescripcion();
                 double debe = cta.getDebe();
                 double haber = cta.getHaber();
@@ -389,65 +452,90 @@ public class VistaCtaCorrienteCliente extends javax.swing.JInternalFrame {
     }
 
     private void insertarMovimientoEnCtaCorriente() {
-
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaComoCadena = sdf.format(txtFecha.getDate());
-        String descripcion = txtDescripcion.getText();
-        double debe = Double.parseDouble(txtDebe.getText());
-        double pago = Double.parseDouble(txtPago.getText());
-        int idCliente = comboClientes.getSelectedIndex() + 1;
+        try{
+        double debe = 0;
         double saldo = 0;
+        double pago = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaEnString = sdf.format(txtFecha.getDate());
+         java.util.Date fechaEnDate = sdf.parse(fechaEnString);
+          java.sql.Date date2 = new java.sql.Date(fechaEnDate.getTime());
+        String descripcion = txtDescripcion.getText();
+        String stringDebe = txtDebe.getText();
+        String stringPago = txtPago.getText();
+        int idCliente = comboClientes.getSelectedIndex() + 1;
+        
 
-        if (pago != 0) {
-            saldo = debe - pago;
-            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(fechaComoCadena, descripcion, debe, pago, saldo, idCliente);
+        if (!stringDebe.isEmpty() && !stringPago.isEmpty()) {
+            debe = Double.parseDouble(stringDebe);
+             pago = Double.parseDouble(stringPago);
+             saldo = debe - pago;
+           CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(date2, descripcion, debe, pago, saldo, idCliente);
 
             base.insertarCtaCorrienteCliente(movimientoCta);
+           
         } else {
+            debe = Double.parseDouble(stringDebe);
             saldo += debe;
-            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(fechaComoCadena, descripcion, debe, pago, saldo, idCliente);
+            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(date2, descripcion, debe, pago, saldo, idCliente);
 
             base.insertarCtaCorrienteCliente(movimientoCta);
         }
         cargarCtaCorrienteCliente();
         double sumatoria = getSaldoCtaCorriente();
-        lblSumatoriaCtaCorriente.setText(String.valueOf(sumatoria));
-        txtDebe.setText("0");
-        txtPago.setText("0");
-
+        lblSumatoriaCtaCorriente.setText(String.valueOf(sumatoria));   
+        }catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "La fecha debe ser ingresada");
+        } catch (ParseException ex) {
+            Logger.getLogger(VistaCtaCorrienteCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void ActualizarCuentaCorriente() {
-
+       try{
+        double debe = 0;
+        double pago = 0;
         double saldoActualizado = 0;
         int fila = modeloTablaCtaCorrienteClientes.getRowCount() - 1;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        String fechaComoCadena = sdf.format(txtFecha.getDate());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaEnString = sdf.format(txtFecha.getDate());
+          java.util.Date fechaEnDate = sdf.parse(fechaEnString);
+          java.sql.Date date2 = new java.sql.Date(fechaEnDate.getTime());
         String descripcion = txtDescripcion.getText();
         int idCliente = comboClientes.getSelectedIndex() + 1;
-        double debe = Double.parseDouble(txtDebe.getText());
-        double pago = Double.parseDouble(txtPago.getText());
+        String stringDebe =txtDebe.getText();
+        String stringPago = txtPago.getText();
         double saldo = (double) modeloTablaCtaCorrienteClientes.getValueAt(fila, 4);
 
-        if (pago != 0 && debe != 0) {
-            JOptionPane.showMessageDialog(null, "Debe ingresar los movimientos de a uno");
-        } else if (pago != 0) {
-            saldoActualizado = saldo - pago;
-            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(fechaComoCadena, descripcion, debe, pago, saldoActualizado, idCliente);
+        if (!stringDebe.isEmpty() && !stringPago.isEmpty()) {
+              debe = Double.parseDouble(stringDebe);
+             pago = Double.parseDouble(stringPago);
+          saldoActualizado = (saldo +debe) - pago;
+              CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(date2, descripcion, debe, pago, saldoActualizado, idCliente);
 
             base.insertarCtaCorrienteCliente(movimientoCta);
-        } else if (debe != 0) {
+        } else if ( !stringPago.isEmpty()) {
+               pago = Double.parseDouble(stringPago);
+            saldoActualizado = saldo - pago;
+            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(date2, descripcion, debe, pago, saldoActualizado, idCliente);
+
+            base.insertarCtaCorrienteCliente(movimientoCta);
+        } else if (!stringDebe.isEmpty()) {
+             debe = Double.parseDouble(stringDebe);
             saldoActualizado = saldo + debe;
-            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(fechaComoCadena, descripcion, debe, pago, saldoActualizado, idCliente);
+            CtaCorrienteCliente movimientoCta = new CtaCorrienteCliente(date2, descripcion, debe, pago, saldoActualizado, idCliente);
 
             base.insertarCtaCorrienteCliente(movimientoCta);
         }
-
-        cargarCtaCorrienteCliente();
-        txtDebe.setText("0");
-        txtPago.setText("0");
+        cargarCtaCorrienteCliente();       
         double sumatoria = getSaldoCtaCorriente();
         lblSumatoriaCtaCorriente.setText(String.valueOf(sumatoria));
-
+       }catch(NullPointerException e){
+            JOptionPane.showMessageDialog(null, "La fecha debe ser ingresada");
+        }catch(NumberFormatException e){
+            JOptionPane.showMessageDialog(null, "Carácter inválido","Error",JOptionPane.ERROR_MESSAGE);
+        } catch (ParseException ex) {
+            Logger.getLogger(VistaCtaCorrienteCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }

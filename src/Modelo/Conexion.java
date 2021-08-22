@@ -22,7 +22,7 @@ public class Conexion {
       public Connection getConexion() {
 
         Connection con = null;
-        String url = "jdbc:mysql://localhost:3306/db-claudio?serverTimezone=UTC";
+        String url = "jdbc:mysql://localhost:3306/dbclaudioo?serverTimezone=UTC";
         String user = "root";
         String password = "";
 

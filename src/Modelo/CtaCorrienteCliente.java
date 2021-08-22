@@ -5,13 +5,15 @@
  */
 package Modelo;
 
+import java.sql.Date;
+
 /**
  *
  * @author maxid
  */
 public class CtaCorrienteCliente {
 
-    public CtaCorrienteCliente(int idCtaCliente, String fecha, String descripcion, double debe, double haber, double saldo, int idCliente) {
+    public CtaCorrienteCliente(int idCtaCliente, Date fecha, String descripcion, double debe, double haber, double saldo, int idCliente) {
         this.idCtaCliente = idCtaCliente;
         this.fecha = fecha;
         this.descripcion = descripcion;
@@ -22,7 +24,7 @@ public class CtaCorrienteCliente {
         this.idCliente = idCliente;
     }
 
-    public CtaCorrienteCliente(String fecha, String descripcion, double debe, double haber,double saldo,int idCliente) {
+    public CtaCorrienteCliente(Date fecha, String descripcion, double debe, double haber,double saldo,int idCliente) {
         this.fecha = fecha;
         this.descripcion = descripcion;
         this.debe = debe;
@@ -41,11 +43,11 @@ public class CtaCorrienteCliente {
         this.idCtaCliente = idCtaCliente;
     }
 
-    public String getFecha() {
+    public Date getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) {
+    public void setFecha(Date fecha) {
         this.fecha = fecha;
     }
 
@@ -99,7 +101,7 @@ public class CtaCorrienteCliente {
     
     
     private int idCtaCliente;
-   private String fecha;
+   private Date fecha;
    private String descripcion;
    private double debe;
    private double haber;
